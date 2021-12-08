@@ -1,0 +1,7 @@
+libspecs/
+Python scripts/__pycache__/
+.project
+.pydevproject
+log.html
+output.xml
+report.html
