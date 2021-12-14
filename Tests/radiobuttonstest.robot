@@ -6,5 +6,6 @@ Library    radiobuttons.RadioButtons
 *** Test Cases ***
 
 Testing buttons
-    Check Radio Buttons
+    Navigate To    https://demoqa.com/radio-button
+    Check Radio
     

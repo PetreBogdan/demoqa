@@ -1,28 +1,43 @@
-import selenium.common.exceptions
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as ec
-from builtins import staticmethod
+
 
 class RadioButtons:
+
+
+    driver = None
     
-    def check_radio_buttons(self):
-        driver = webdriver.Chrome()
-        driver.maximize_window()
-        driver.get("https://demoqa.com/radio-button")
-        
-        messages = ['yes', 'impressive', 'no']
-        
-        for message in messages:
-            button = driver.find_element(By.XPATH, f"//label[@for='{message}Radio']")
+    def navigate_to(self, url):
+        RadioButtons.driver = webdriver.Chrome()
+        RadioButtons.driver.maximize_window()
+        RadioButtons.driver.get(url)
+
+    
+    def get_labels(self):
+        list_of_labels = []
+        label_xpath = "//div[contains(@class, 'custom-radio')]//label"
+        labels = RadioButtons.driver.find_elements(By.XPATH, label_xpath)
+        for label in labels:
+            list_of_labels.append(label.text)
+        return list_of_labels
+
+    def check_radio(self):
+        list_of_labels = self.get_labels()
+        input_xpath = "//div[label[text() = '{}']]/input"
+        label_xpath = "//div[contains(@class, 'custom-radio')]//label[text() = '{}']"
+        for label in list_of_labels:
+            radio = RadioButtons.driver.find_element(By.XPATH, label_xpath.format(label))
+            radio_selected = RadioButtons.driver.find_element(By.XPATH, input_xpath.format(label))
+            radio.click()
             try:
-                button.click()
-                wait = WebDriverWait(driver, 3)
-                result = wait.until(ec.presence_of_element_located((By.CLASS_NAME, 'text-success')))
-                assert result.text.lower() == message
-                driver.refresh()
-            except selenium.common.exceptions.TimeoutException:
-                print("Button cannot be presed")
-        
-        driver.quit()
+                assert radio_selected.is_selected()
+            except AssertionError:
+                print("Radio button {} could not be pressed".format(radio.text))
+        RadioButtons.driver.quit()
+#
+#
+# if __name__ == '__main__':
+#
+#     radio = RadioButtons()
+#     lista = radio.get_labels()
+#     radio.check_radio()
