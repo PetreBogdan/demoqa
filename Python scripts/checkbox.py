@@ -1,42 +1,51 @@
 from selenium import webdriver
-import time
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as ec
-
-
-def complete_checkboxes(input_dict, driver):
-    click_xpath = "//div[contains(@class, 'check-box-tree')]//span[text()='{}']"
-    is_selected_xpath = "//label[span[text()='{}']]//input"
-    driver.execute_script("window.scrollBy(0,200)")
-
-    for key, value in input_dict.items():
-        time.sleep(0.2)
-        button = driver.find_element(By.XPATH, click_xpath.format(key))
-        if value == 'checked':
-            check_button = driver.find_element(By.XPATH, is_selected_xpath.format(key))
-            if check_button.is_selected():
-                pass
-            else:
-                button.click()
 
 
 
-driver = webdriver.Chrome()
-driver.maximize_window()
-driver.get("https://demoqa.com/checkbox")
+class CheckBox:
 
-input_dict = {'Home': 'unchecked', 'Desktop': 'unchecked', 'Notes': 'checked',
-              'Commands': 'unchecked', 'Documents': 'unchecked', 'WorkSpace': 'unchecked',
-              'React': 'unchecked', 'Angular': 'checked', 'Veu': 'checked',
-              'Office': 'unchecked', 'Public': 'unchecked', 'Private': 'checked',
-              'Classified': 'unchecked', 'General': 'unchecked', 'Downloads': 'checked',
-              'Word File.doc': 'checked', 'Excel File.doc': 'unchecked'}
+    driver = None
 
-expand_button = driver.find_element(By.XPATH, "//button[@aria-label= \"Expand all\"]")
-expand_button.click()
+    def navigate_to(self, url):
+        CheckBox.driver = webdriver.Chrome()
+        CheckBox.driver.maximize_window()
+        CheckBox.driver.get(url)
 
-complete_checkboxes(input_dict, driver)
+    def expand_all(self):
+        expand_button = CheckBox.driver.find_element(By.XPATH, "//button[@aria-label= \"Expand all\"]")
+        expand_button.click()
 
 
-driver.quit()
+    def complete_checkboxes(self, input_dict):
+        click_xpath = "//div[contains(@class, 'check-box-tree')]//span[text()='{}']"
+        is_selected_xpath = "//label[span[text()='{}']]//input"
+        CheckBox.driver.execute_script("window.scrollBy(0,200)")
+
+        for key, value in input_dict.items():
+            button = CheckBox.driver.find_element(By.XPATH, click_xpath.format(key))
+            if value == 'checked':
+                check_button = CheckBox.driver.find_element(By.XPATH, is_selected_xpath.format(key))
+                if not check_button.is_selected():
+                    button.click()
+
+
+
+    def verify_checked_boxes(self, input_dict):
+        list_of_outputs = []
+        output_xpath = "//div[span[contains(text(),  'You have selected')]]//span[@class='text-success']"
+        outputs = CheckBox.driver.find_elements(By.XPATH, output_xpath)
+        for output in outputs:
+            list_of_outputs.append(output.text)
+
+        for key, value in input_dict.items():
+            if value == 'checked':
+                if key == 'Word File.doc':
+                    verify = 'wordFile'
+                elif key == 'Excel File.doc':
+                    verify = 'excelFile'
+                else:
+                    verify = key.lower()
+                assert verify in list_of_outputs
+
+        CheckBox.driver.quit()

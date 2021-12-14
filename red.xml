@@ -4,6 +4,7 @@
     <relativeTo>WORKSPACE</relativeTo>
     <referencedLibrary type="PYTHON" name="textbox.TextBox" path="demoqa/Python scripts/textbox.py" dynamic="false"/>
     <referencedLibrary type="PYTHON" name="radiobuttons.RadioButtons" path="demoqa/Python scripts/radiobuttons.py" dynamic="false"/>
+    <referencedLibrary type="PYTHON" name="checkbox.CheckBox" path="demoqa/Python scripts/checkbox.py" dynamic="false"/>
     <pythonpath/>
     <classpath/>
     <excludedForValidation/>
