@@ -12,4 +12,5 @@ Testing boxes
     Navigate To    https://demoqa.com/text-box 
     Input Data    ${input_dict}
     Verify Output    ${input_dict}
+    Close Driver
     

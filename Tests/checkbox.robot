@@ -28,3 +28,4 @@ Check TestBoxes and verify them
     Expand All
     Complete Checkboxes    ${input_dict}
     Verify Checked Boxes    ${input_dict}
+    Close Driver

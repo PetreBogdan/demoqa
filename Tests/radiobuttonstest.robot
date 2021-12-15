@@ -8,4 +8,5 @@ Library    radiobuttons.RadioButtons
 Testing buttons
     Navigate To    https://demoqa.com/radio-button
     Check Radio
+    Close Driver
     
